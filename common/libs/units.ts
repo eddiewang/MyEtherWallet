@@ -3,7 +3,10 @@ import { stripHexPrefix } from 'libs/values';
 
 type UnitKey = keyof typeof Units;
 type Wei = BN;
-type TokenValue = BN;
+interface TokenValue {
+  balance: BN | null;
+  error: string | null;
+}
 
 const Units = {
   wei: '1',
@@ -48,7 +51,13 @@ const handleValues = (input: string | BN) => {
 
 const Wei = (input: string | BN): Wei => handleValues(input);
 
-const TokenValue = (input: string | BN) => handleValues(input);
+const TokenValue = (
+  input: string | BN | null,
+  error: string | null = null
+): TokenValue => ({
+  balance: input ? handleValues(input) : null,
+  error
+});
 
 const getDecimal = (key: UnitKey) => Units[key].length - 1;
 
@@ -86,7 +95,7 @@ const toWei = (value: string, decimal: number): Wei => {
   return Wei(wei);
 };
 
-const fromTokenBase = (value: TokenValue, decimal: number) =>
+const fromTokenBase = (value: BN, decimal: number) =>
   baseToConvertedUnit(value.toString(), decimal);
 
 const toTokenBase = (value: string, decimal: number) =>

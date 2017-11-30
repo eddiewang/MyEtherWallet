@@ -7,6 +7,7 @@ import {
   TokenValue
 } from 'libs/units';
 import { formatNumber as format } from 'utils/formatters';
+import BN from 'bn.js';
 
 interface Props {
   /**
@@ -46,9 +47,13 @@ const UnitDisplay: React.SFC<EthProps | TokenProps> = params => {
     return <span>Balance isn't available offline</span>;
   }
 
+  if (!(value as TokenValue).balance) {
+    return <span>{(value as TokenValue).error}</span>;
+  }
+
   const convertedValue = isEthereumUnit(params)
-    ? fromTokenBase(value, getDecimal(params.unit))
-    : fromTokenBase(value, params.decimal);
+    ? fromTokenBase(value as Wei, getDecimal(params.unit))
+    : fromTokenBase((value as TokenValue).balance as BN, params.decimal);
 
   let formattedValue;
 

@@ -10,6 +10,7 @@ import { isValidETHAddress } from 'libs/validators';
 import { stripHexPrefixAndLower, sanitizeHex, toHexWei } from 'libs/values';
 import { IWallet, Web3Wallet } from 'libs/wallet';
 import { translateRaw } from 'translations';
+import BN from 'bn.js';
 
 export interface TransactionInput {
   token?: Token | null;
@@ -96,7 +97,7 @@ async function getBalance(
     balance = toTokenBase(
       await node.getTokenBalance(tx.from, token).toString(),
       token.decimal
-    );
+    ).balance as BN;
   } else {
     balance = ETHBalance;
   }
@@ -227,8 +228,8 @@ export async function formatTxInput(
     if (!token) {
       throw new Error('No matching token');
     }
-    const bigAmount = TokenValue(value);
-    const ERC20Data = ERC20.transfer(to, bigAmount);
+    const bigAmount = TokenValue(value).balance;
+    const ERC20Data = ERC20.transfer(to, bigAmount as BN);
     return {
       to: token.address,
       from: await wallet.getAddressString(),
@@ -315,7 +316,7 @@ export function decodeTransaction(transaction: EthTx, token: Token | false) {
   const { to, value, data, gasPrice, nonce, from } = getTransactionFields(
     transaction
   );
-  let fixedValue: TokenValue;
+  let fixedValue: BN;
   let toAddress;
 
   if (token) {

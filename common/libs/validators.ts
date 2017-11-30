@@ -231,9 +231,7 @@ export const isValidCallRequest = (response: JsonRpcResponse) =>
   isValidEthCall(response, schema.RpcNode)('Call Request');
 
 export const isValidTokenBalance = (response: JsonRpcResponse) =>
-  isValidEthCall(response, schema.RpcNode)('Token Balance', () => ({
-    result: 'Failed'
-  }));
+  isValidEthCall(response, schema.RpcNode)('Token Balance');
 
 export const isValidTransactionCount = (response: JsonRpcResponse) =>
   isValidEthCall(response, schema.RpcNode)('Transaction Count');

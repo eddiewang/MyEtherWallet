@@ -1,4 +1,5 @@
 import { TokenValue, Wei } from 'libs/units';
+import BN from 'bn.js';
 
 export interface ITokenData {
   value: TokenValue;
@@ -12,7 +13,7 @@ export interface ITokenValues {
 export interface DeterministicWalletData {
   index: number;
   address: string;
-  value?: TokenValue;
+  value?: BN;
   tokenValues: ITokenValues;
 }
 

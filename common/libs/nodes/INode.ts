@@ -8,11 +8,8 @@ export interface TxObj {
 }
 export interface INode {
   getBalance(address: string): Promise<Wei>;
-  getTokenBalance(address: string, token: Token): Promise<TokenValue | string>;
-  getTokenBalances(
-    address: string,
-    tokens: Token[]
-  ): Promise<(TokenValue | string)[]>;
+  getTokenBalance(address: string, token: Token): Promise<TokenValue>;
+  getTokenBalances(address: string, tokens: Token[]): Promise<TokenValue[]>;
   estimateGas(tx: TransactionWithoutGas): Promise<Wei>;
   getTransactionCount(address: string): Promise<string>;
   sendRawTx(tx: string): Promise<string>;

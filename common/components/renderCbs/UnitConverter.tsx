@@ -1,6 +1,7 @@
 import { toTokenBase } from 'libs/units';
 
 import React, { Component } from 'react';
+import BN from 'bn.js';
 
 interface IChildren {
   onUserInput: UnitConverter['onUserInput'];
@@ -49,7 +50,7 @@ export class UnitConverter extends Component<Props, State> {
     });
   }
   private baseUnitCb = (value: string, decimal: number) => {
-    const baseUnit = toTokenBase(value, decimal).toString();
+    const baseUnit = (toTokenBase(value, decimal).balance as BN).toString();
     const fakeEvent = {
       currentTarget: {
         value: baseUnit
